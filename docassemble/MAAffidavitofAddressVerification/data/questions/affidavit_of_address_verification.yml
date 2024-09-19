@@ -1,0 +1,438 @@
+---
+include:
+  - docassemble.AssemblyLine:assembly_line.yml
+---
+metadata:
+  title: >-
+    Affidavit of address verification
+  short title: >-
+    Affidavit of address veri
+  description: |-
+    This interview helps someone in Massachusetts file an affidavit of address verification.
+  can_I_use_this_form: |
+    If you are a plaintiff, or represent a plaintiff, in a case filed to collect money from         borrowers who have not made credit card, loan, or certain other types of payments, you can       use this interview to fill out an affidavit of address verification.
+  before_you_start: |
+    This interview will help you file an affidavit of address verification.
+    
+    Before you get started, please gather:
+    
+    1. Your case docket number. 
+    2. Any correspondence sent to or received from the defendant, if applicable. 
+    3. Any documentation used to verify the defendant's address. 
+    4. Your employment information.
+    
+    When you are finished, you will need to:
+    
+    1. Print this form. 
+    1. File this form in the proper court.
+  maturity: production
+  estimated_completion_minutes: 10
+  estimated_completion_delta: 5
+  LIST_topics: 
+    - "MO-00-00-00-00"
+  tags:
+    - "MO-00-00-00-00"
+  authors:
+    - Erin Gray
+  original_form:
+    - https://www.mass.gov/doc/affidavit-of-address-verification-mass-r-civ-p-81e/download
+  original_form_published_on: ""
+  help_page_url: >-
+    https://www.mass.gov/rules-of-civil-procedure/civil-procedure-rule-81-special-requirements-for-certain-consumer-debts
+  help_page_title: >-
+    Special Requirements for Consumer Debts
+  allowed_courts: 
+    - "Boston Municipal Court"
+    - "District Court"
+    - "Superior Court"
+  typical_role: "plaintiff"
+  al_weaver_version: "1.11.0"
+  generated_on: "2024-09-18"
+  languages:
+    - en
+  jurisdiction: NAM-US-US+MA
+  review_date: 2024-09-18
+  form_titles:
+    - Affidavit of address verification
+  form_numbers: []
+  update_notes: |
+---
+code: |
+  # This controls the default country and list of states in address field questions
+  AL_DEFAULT_COUNTRY = "US"
+---
+code: |
+  # This controls the default state in address field questions
+  AL_DEFAULT_STATE = "MA"
+---
+code: |
+  github_repo_name =  'docassemble-AffidavitOfAddressVerification'
+---
+code: |
+  interview_short_title = "File an affidavit of address verification"
+---
+code: |
+  al_form_type = "existing_case" 
+---
+objects:
+  - state_motor_vehicle_registry_record: ALPeopleList
+  - users: ALPeopleList.using(there_are_any=True)
+  - municipal_record: ALPeopleList
+---
+sections:
+  - review_affidavit_of_address_verification: Review your answers
+---
+#################### Interview order #####################
+comment: |
+  Controls order and branching logic for questions specific to this form
+id: interview_order_affidavit_of_address_verification
+code: |
+  # Set the allowed courts for this interview
+  allowed_courts = ['Boston Municipal Court', 'District Court', 'Superior Court']
+  nav.set_section("review_affidavit_of_address_verification")
+  user_role = "plaintiff"
+  user_ask_role = "plaintiff"
+  Should_I_be_filing_this_form
+  docket_number
+  plaintiffs.gather()
+  set_progress(20)
+  defendants.gather()
+  trial_court.address.address
+  receipt_of_address_verification_from_defendant
+  set_progress(40)
+  plaintiff_name_position_and_employer
+  signature_date
+  interview_order_affidavit_of_address_verification = True
+---
+###################### Main order ######################
+comment: |
+  This block includes the logic for standalone interviews.
+  Delete mandatory: True to include in another interview
+mandatory: True
+code: |
+  al_intro_screen
+  affidavit_of_address_verification_intro
+  interview_order_affidavit_of_address_verification
+  signature_date
+  # Store anonymous data for analytics / statistics
+  store_variables_snapshot(
+      persistent=True,
+      data={
+          "zip": showifdef("users[0].address.zip"),
+          "reached_interview_end": True,
+      },
+  )
+  affidavit_of_address_verification_download
+---
+id: Affidavit_of_address_verification
+continue button field: affidavit_of_address_verification_intro
+question: |
+  Affidavit of address verification
+subquestion: |
+  This interview will help you file an affidavit of address verification.
+  
+  Before you get started, please gather:
+  
+  1. Your case docket number. 
+  2. Any correspondence sent to or received from the defendant, if applicable. 
+  3. Any documentation used to verify the defendant's address. 
+  4. Your employment information.
+  
+  When you are finished, you will need to:
+  
+  1. Print this form. 
+  1. File this form in the proper court.
+
+  If you are a _____________, you can use this interview to ____________.
+
+  Most people take about 10 minutes to complete this interview.
+---
+id: Should I be filing this form
+question: |
+  Should I be filing this form?
+subquestion: |
+  Under the Massachusetts Rules of Civil Procedure, a plaintiff is required to file this form with their complaint for claims to collect consumer debt arising from the use of certain revolving credit agreements (primarily credit card collection cases), and prevent non-complying plaintiffs from obtaining defaults or default judgments in such cases. If you are not a plaintiff in this type of case or do not represent a plaintiff pursuing this type of claim, do not continue with this interview.
+continue button field: Should_I_be_filing_this_form
+---
+id: How did you verify the defendant s address
+question: |
+  How did you verify the defendant's address?
+subquestion: |
+  By filling out this form, you, as the plaintiff or in representing the plaintiff, are stating that the defendant's residential address was verified within three months prior to the commencement of this action by at least one of the following three methods.
+fields:
+  - "Did you receive correspondence from the defendant with that return address or receive correspondence from the defendant within the past three months?": receipt_of_address_verification_from_defendant
+    datatype: yesno
+    required: False
+  - "Please insert other verification method from the defendant, if applicable.": defendant_address_verification_method
+    maxlength: 84
+    required: False
+  - "Verification date.": verification_date1
+    maxlength: 23
+    required: False
+  - "Did you receive a certified mail receipt signed by the defendant with their address within the past three months?": received_certified_mail_receipt_from_defendant
+    datatype: yesno
+    required: False
+  - "Verification date.": verification_date2
+    maxlength: 22
+    required: False
+  - "Did you send a letter by first-class mail to this address for the defendant that has not been returned, and you verified this address using a paid subscriber-based commercial database?": letter_sent_not_returned_and_address_on_database
+    datatype: yesno
+    required: False
+  - "Did you use a municipal record to further verify the defendant's address?": municipal_record_used
+    datatype: yesno
+    required: False
+  - "Please insert the name of the municipal record used.": municipal_record_name
+    maxlength: 80
+    required: False
+  - "Did you use a state motor vehicle record to further verify the defendant's address?": state_motor_vehicle_registry_record_used
+    datatype: yesno
+    required: False
+  - "Please insert the name of the state motor vehicle registry record used.": state_motor_vehicle_registry_record_name
+    maxlength: 80
+    required: False
+  - "Were neither record type available?": neither_record_type_available
+    datatype: yesno
+    required: False
+  - "If any database or municipal or state record used showed more than one address for the defendant during the last 12 months, please describe the basis for selecting the address used for service.": defendant_address_selection_basis_for_service
+    maxlength: 83
+    required: False
+  - "Verification date.": verification_date3
+    maxlength: 23
+    required: False
+---
+id: Employment Information
+question: |
+  Employment Information
+subquestion: |
+  As a final step before signature, please insert the following requested information regarding your employment status.
+fields:
+  - "Please insert your name, job position and employer information.": plaintiff_name_position_and_employer
+    maxlength: 94
+    required: False
+---
+id: preview affidavit_of_address_verification
+question: |
+  Preview your form before you sign it
+subquestion: |
+  Here is a preview of the form you will sign on the next page.   
+  
+  ${ al_court_bundle.as_pdf(key='preview') }
+
+  Click the image to open it in a new tab. Click the "Edit answers" button
+  to edit your answers.
+
+  ${ action_button_html(url_action('review_affidavit_of_address_verification'), label='Edit answers', color='info') }
+  
+  Remember to come back to this window to continue and sign your form.
+continue button field: affidavit_of_address_verification_preview_question    
+---
+code: |
+  signature_fields = ['plaintiffs[0].signature']
+---
+code: |
+  # This is a placeholder for the addresses that will be searched
+  # for matching address to court. Edit if court venue is based on 
+  # a different address than the user's
+  [user.address.address for user in users.complete_elements()]
+  addresses_to_search = [user.address for user in users.complete_elements()]
+---
+id: affidavit of address verification review screen
+event: review_affidavit_of_address_verification
+question: |
+  Review your answers
+review:
+  - Edit: docket_number
+    button: |
+      **Docket number**:
+      ${ docket_number }
+  - Edit: defendants.revisit
+    button: |
+      **Defendants**
+
+      % for item in defendants:
+        * ${ item }
+      % endfor
+  - Edit: plaintiffs.revisit
+    button: |
+      **Plaintiffs**
+
+      % for item in plaintiffs:
+        * ${ item }
+      % endfor
+  - Edit: trial_court
+    button: |
+      **Trial court**
+  
+      % if defined("trial_court.address.county"):
+      * address: ${ trial_court.address.block() }
+      % endif
+  - Edit: receipt_of_address_verification_from_defendant
+    button: |
+      **Did you receive correspondence from the defendant with that return address or receive correspondence from the defendant within the past three months?**:
+      ${ word(yesno(receipt_of_address_verification_from_defendant)) }
+  - Edit: defendant_address_verification_method
+    button: |
+      **Please insert other verification method from the defendant, if applicable.**:
+      ${ defendant_address_verification_method }
+  - Edit: verification_date1
+    button: |
+      **Verification date.**:
+      ${ verification_date1 }
+  - Edit: received_certified_mail_receipt_from_defendant
+    button: |
+      **Did you receive a certified mail receipt signed by the defendant with their address within the past three months?**:
+      ${ word(yesno(received_certified_mail_receipt_from_defendant)) }
+  - Edit: verification_date2
+    button: |
+      **Verification date.**:
+      ${ verification_date2 }
+  - Edit: letter_sent_not_returned_and_address_on_database
+    button: |
+      **Did you send a letter by first-class mail to this address for the defendant that has not been returned, and you verified this address using a paid subscriber-based commercial database?**:
+      ${ word(yesno(letter_sent_not_returned_and_address_on_database)) }
+  - Edit: municipal_record_used
+    button: |
+      **Did you use a municipal record to further verify the defendant's address?**:
+      ${ word(yesno(municipal_record_used)) }
+  - Edit: municipal_record_name
+    button: |
+      **Please insert the name of the municipal record used.**:
+      ${ municipal_record_name }
+  - Edit: state_motor_vehicle_registry_record_used
+    button: |
+      **Did you use a state motor vehicle record to further verify the defendant's address?**:
+      ${ word(yesno(state_motor_vehicle_registry_record_used)) }
+  - Edit: state_motor_vehicle_registry_record_name
+    button: |
+      **Please insert the name of the state motor vehicle registry record used.**:
+      ${ state_motor_vehicle_registry_record_name }
+  - Edit: neither_record_type_available
+    button: |
+      **Were neither record type available?**:
+      ${ word(yesno(neither_record_type_available)) }
+  - Edit: defendant_address_selection_basis_for_service
+    button: |
+      **If any database or municipal or state record used showed more than one address for the defendant during the last 12 months, please describe the basis for selecting the address used for service.**:
+      ${ defendant_address_selection_basis_for_service }
+  - Edit: verification_date3
+    button: |
+      **Verification date.**:
+      ${ verification_date3 }
+  - Edit: signature_date
+    button: |
+      **Date of signature**:
+      ${ signature_date }
+  - Edit: plaintiff_name_position_and_employer
+    button: |
+      **Please insert your name, job position and employer information.**:
+      ${ plaintiff_name_position_and_employer }
+---
+continue button field: defendants.revisit
+question: |
+  Edit defendants
+subquestion: |
+  ${ defendants.table }
+
+  ${ defendants.add_action() }
+---
+table: defendants.table
+rows: defendants
+columns:
+  - Name: |
+      row_item.name.full() if defined("row_item.name.first") else ""
+edit:
+  - name.first
+confirm: True
+
+---
+continue button field: plaintiffs.revisit
+question: |
+  Edit plaintiffs
+subquestion: |
+  ${ plaintiffs.table }
+
+  ${ plaintiffs.add_action() }
+---
+table: plaintiffs.table
+rows: plaintiffs
+columns:
+  - Name: |
+      row_item.name.full() if defined("row_item.name.first") else ""
+  - Signature: |
+      row_item.signature if defined("row_item.signature") else ""
+edit:
+  - name.first
+  - signature
+confirm: True
+
+---
+id: download affidavit_of_address_verification
+event: affidavit_of_address_verification_download
+question: |
+  All done
+subquestion: |
+  Thank you ${users}. Your form is ready to download and deliver.
+  
+  View, download and send your form below. Click the "Edit answers" button to fix any mistakes.
+
+  ${ action_button_html(url_action('review_affidavit_of_address_verification'), label='Edit answers', color='info') }
+  
+  
+  ${ al_user_bundle.download_list_html() }
+  
+
+  ${ al_user_bundle.send_button_html(show_editable_checkbox=False) }
+
+progress: 100
+---
+# ALDocument objects specify the metadata for each template
+objects:
+  - affidavit_of_address_verification_Post_interview_instructions: ALDocument.using(title="Instructions", filename="affidavit_of_address_verification_next_steps.docx", enabled=True, has_addendum=False)
+  - affidavit_of_address_verification_attachment: ALDocument.using(title="Affidavit of address verification", filename="affidavit_of_address_verification", enabled=True, has_addendum=False, )
+---
+# Bundles group the ALDocuments into separate downloads, such as for court and for the user
+objects:
+  - al_user_bundle: ALDocumentBundle.using(elements=[affidavit_of_address_verification_Post_interview_instructions, affidavit_of_address_verification_attachment], filename="affidavit_of_address_verification", title="All forms to download for your records", enabled=True)
+  - al_court_bundle: ALDocumentBundle.using(elements=[affidavit_of_address_verification_attachment],  filename="affidavit_of_address_verification", title="All forms to deliver to court", enabled=True)
+---
+# Each attachment defines a key in an ALDocument. We use `i` as the placeholder here so the same template is 
+# used for "preview" and "final" keys, and logic in the template checks the value of 
+# `i` to show or hide the user's signature
+attachment:
+  name: Post-interview-Instructions
+  filename: affidavit_of_address_verification_next_steps
+  docx template file: affidavit_of_address_verification_next_steps.docx
+  variable name: affidavit_of_address_verification_Post_interview_instructions[i]
+  skip undefined: True
+  tagged pdf: True
+---
+attachment:
+  name: affidavit of address verification
+  filename: affidavit_of_address_verification
+  variable name: affidavit_of_address_verification_attachment[i]
+  skip undefined: True
+  pdf template file: affidavit_of_address_verification.pdf
+  fields:
+      - "docket_number": ${ docket_number }
+      - "defendant_name": ${ defendants[0] }
+      - "plaintiff_name": ${ plaintiffs[0] }
+      - "trial_court_address_county": ${ trial_court.address.county }
+      - "receipt_of_address_verification_from_defendant": ${ receipt_of_address_verification_from_defendant }
+      - "defendant_address_verification_method": ${ defendant_address_verification_method }
+      - "verification_date1": ${ verification_date1 }
+      - "received_certified_mail_receipt_from_defendant": ${ received_certified_mail_receipt_from_defendant }
+      - "verification_date2": ${ verification_date2 }
+      - "letter_sent_not_returned_and_address_on_database": ${ letter_sent_not_returned_and_address_on_database }
+      - "municipal_record_used": ${ municipal_record_used }
+      - "municipal_record_name": ${ municipal_record_name }
+      - "state_motor_vehicle_registry_record_used": ${ state_motor_vehicle_registry_record_used }
+      - "state_motor_vehicle_registry_record_name": ${ state_motor_vehicle_registry_record_name }
+      - "neither_record_type_available": ${ neither_record_type_available }
+      - "defendant_address_selection_basis_for_service": ${ defendant_address_selection_basis_for_service }
+      - "verification_date3": ${ verification_date3 }
+      - "plaintiff_signature": ${ plaintiffs[0].signature_if_final(i) }
+      - "signature_date": ${ signature_date }
+      - "plaintiff_name_position_and_employer": ${ plaintiff_name_position_and_employer }
+
+
+
