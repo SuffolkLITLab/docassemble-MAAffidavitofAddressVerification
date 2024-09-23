@@ -10,7 +10,7 @@ metadata:
   description: |-
     This interview helps someone in Massachusetts file an affidavit of address verification.
   can_I_use_this_form: |
-    If you are a plaintiff, or represent a plaintiff, in a case filed to collect money from         borrowers who have not made credit card, loan, or certain other types of payments, you can       use this interview to fill out an affidavit of address verification.
+    If you are a plaintiff, or represent a plaintiff, in a case filed to collect money from borrowers who have not made credit card, loan, or certain other types of payments, you can    use this interview to fill out an affidavit of address verification.
   before_you_start: |
     This interview will help you file an affidavit of address verification.
     
@@ -143,7 +143,7 @@ subquestion: |
   1. Print this form. 
   1. File this form in the proper court.
 
-  If you are a _____________, you can use this interview to ____________.
+  If you are a plaintiff, or represent a plaintiff, in a case filed to collect money from borrowers who have not made credit card, loan, or certain other types of payments, you can    use this interview to fill out an affidavit of address verification.
 
   Most people take about 10 minutes to complete this interview.
 ---
