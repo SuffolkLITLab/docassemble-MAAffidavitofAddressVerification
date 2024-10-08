@@ -1,6 +1,7 @@
 ---
 include:
   - docassemble.AssemblyLine:assembly_line.yml
+  - docassemble.MassAccess:massaccess.yml
 ---
 metadata:
   title: >-
@@ -92,15 +93,28 @@ code: |
   nav.set_section("review_affidavit_of_address_verification")
   user_role = "plaintiff"
   user_ask_role = "plaintiff"
-  Should_I_be_filing_this_form
+  should_I_be_filing_this_form
   docket_number
   plaintiffs.gather()
   set_progress(20)
   defendants.gather()
   trial_court.address.address
-  receipt_of_address_verification_from_defendant
+  address_verification_method
+  if address_verification_method == "receipt_of_address_verification_from_defendant": 
+    defendant_address_verification_method
+  if address_verification_method == "received_certified_mail_receipt_from_defendant":
+    verification_date2
+  if address_verification_method == "letter_sent_not_returned_and_address_on_database":
+    record_type_used
+  if record_type_used == "municipal_record_used":
+    municipal_record_name
+  if record_type_used == "state_motor_vehicle_registry_record_used":
+    state_motor_vehicle_registry_record_name
+  if address_verification_method == "letter_sent_not_returned_and_address_on_database":
+    defendant_address_selection_basis_for_service
   set_progress(40)
   plaintiff_name_position_and_employer
+  plaintiffs[0].signature
   signature_date
   interview_order_affidavit_of_address_verification = True
 ---
@@ -151,60 +165,118 @@ id: Should I be filing this form
 question: |
   Should I be filing this form?
 subquestion: |
-  Under the Massachusetts Rules of Civil Procedure, a plaintiff is required to file this form with their complaint for claims to collect consumer debt arising from the use of certain revolving credit agreements (primarily credit card collection cases), and prevent non-complying plaintiffs from obtaining defaults or default judgments in such cases. If you are not a plaintiff in this type of case or do not represent a plaintiff pursuing this type of claim, do not continue with this interview.
-continue button field: Should_I_be_filing_this_form
+  A plaintiff is required to file this form with their complaint for claims to collect consumer debt, primarily credit card collection cases. If you are not a plaintiff in this type of case or do not represent a plaintiff pursuing this type of claim, do not continue with this interview.
+continue button field: should_I_be_filing_this_form
+---
+id: user's name
+sets:
+  - users[0].name.first
+  - users[0].name.last
+question: |
+  Plaintiff's name
+fields:
+  - code: |
+      users[0].name_fields(person_or_business="unsure")
 ---
 id: How did you verify the defendant s address
 question: |
   How did you verify the defendant's address?
 subquestion: |
-  By filling out this form, you, as the plaintiff or in representing the plaintiff, are stating that the defendant's residential address was verified within three months prior to the commencement of this action by at least one of the following three methods.
+  By filling out this form, you, as the plaintiff or in representing the plaintiff, are stating that the defendant's residential address was verified within three months prior to the commencement of this action by at least one of the following three methods. 
 fields:
-  - "Did you receive correspondence from the defendant with that return address or receive correspondence from the defendant within the past three months?": receipt_of_address_verification_from_defendant
-    datatype: yesno
-    required: False
+  - Please select one verification method: address_verification_method
+    datatype: radio
+    choices:
+      - "Received correspondence from the defendant with their return address or received     correspondence from the defendant within the past three months.": receipt_of_address_verification_from_defendant
+      - "Received a certified mail receipt signed by the defendant with their address within the past three months.": received_certified_mail_receipt_from_defendant
+      - "Sent a letter by first-class mail to this address for the defendant that has not been returned, and you verified this address using a paid subscriber-based commercial database.": letter_sent_not_returned_and_address_on_database
+--- 
+id: Option 1
+question: |
+  Received correspondence from the defendant with their return address or received correspondence from the defendant within the past three months.
+fields: 
   - "Please insert other verification method from the defendant, if applicable.": defendant_address_verification_method
     maxlength: 84
     required: False
   - "Verification date.": verification_date1
     maxlength: 23
-    required: False
-  - "Did you receive a certified mail receipt signed by the defendant with their address within the past three months?": received_certified_mail_receipt_from_defendant
-    datatype: yesno
-    required: False
+    required: True
+show if: 
+  variable: receipt_of_address_verification_from_defendant
+  is: True
+---
+id: Option 2
+question: | 
+  Received a certified mail receipt signed by the defendant with their address within the past three months.
+fields: 
   - "Verification date.": verification_date2
     maxlength: 22
-    required: False
-  - "Did you send a letter by first-class mail to this address for the defendant that has not been returned, and you verified this address using a paid subscriber-based commercial database?": letter_sent_not_returned_and_address_on_database
-    datatype: yesno
-    required: False
-  - "Did you use a municipal record to further verify the defendant's address?": municipal_record_used
-    datatype: yesno
-    required: False
-  - "Please insert the name of the municipal record used.": municipal_record_name
+    required: True
+show if: 
+  variable: received_certified_mail_receipt_from_defendant
+  is: True
+---
+id: Option 3
+question: |
+  Sent a letter by first-class mail to this address for the defendant that has not been returned, and you verified this address using a paid subscriber-based commercial database.
+subquestion: |
+  In addition to sending first-class mail and verifying the address through a paid subscriber-based commercial database, you, or your client, must have used a municipal record or state motor vehicle registry record to confirm the address if available. Please select one of the following. 
+fields:
+  - Please select one verification method: record_type_used
+    datatype: radio
+    choices:
+      - "Used a municipal record to further verify the defendant's address. For example, a street list or tax record.": municipal_record_used
+      - "Used a state motor vehicle registry record to further verify the defendant's address.": state_motor_vehicle_registry_record_used
+      - "Neither record type was available.": neither_record_type_available
+show if: 
+  variable: letter_sent_not_returned_and_address_on_database
+  is: True
+---
+id: Option 3a
+question: |
+  Used a municipal record to further verify the defendant's address.
+fields:
+  - Please insert the name of the municipal record used: municipal_record_name
     maxlength: 80
-    required: False
-  - "Did you use a state motor vehicle record to further verify the defendant's address?": state_motor_vehicle_registry_record_used
-    datatype: yesno
-    required: False
-  - "Please insert the name of the state motor vehicle registry record used.": state_motor_vehicle_registry_record_name
-    maxlength: 80
-    required: False
-  - "Were neither record type available?": neither_record_type_available
-    datatype: yesno
-    required: False
-  - "If any database or municipal or state record used showed more than one address for the defendant during the last 12 months, please describe the basis for selecting the address used for service.": defendant_address_selection_basis_for_service
-    maxlength: 83
-    required: False
+    required: True
   - "Verification date.": verification_date3
     maxlength: 23
+    required: True
+show if: 
+  variable: municipal_record_used
+  is: True
+---
+id: Option 3b
+question: |
+  Used a state motor vehicle registry record to further verify the defendant's address.
+fields:
+  - Please insert the name of the state motor vehicle registry record used: state_motor_vehicle_registry_record_name
+    maxlength: 80
+    required: True
+  - "Verification date.": verification_date3
+    maxlength: 23
+    required: True
+show if: 
+  variable: state_motor_vehicle_registry_record_used
+  is: True
+---
+id: Option 3 cont.
+question: |
+  Sent a letter by first-class mail to the defendant. 
+fields:
+  - "If any database, municipal record, or state record used showed more than one address for the defendant during the last 12 months, please describe the basis for selecting the address used for service.": defendant_address_selection_basis_for_service
+    datatype: area
+    maxlength: 83
     required: False
+show if: 
+  variable: letter_sent_not_returned_and_address_on_database
+  is: True
 ---
 id: Employment Information
 question: |
   Employment Information
 subquestion: |
-  As a final step before signature, please insert the following requested information regarding your employment status.
+  As a final step before signature, please insert the following requested information regarding your, or your client's, employment status.
 fields:
   - "Please insert your name, job position and employer information.": plaintiff_name_position_and_employer
     maxlength: 94
@@ -417,12 +489,12 @@ attachment:
       - "defendant_name": ${ defendants[0] }
       - "plaintiff_name": ${ plaintiffs[0] }
       - "trial_court_address_county": ${ trial_court.address.county }
-      - "receipt_of_address_verification_from_defendant": ${ receipt_of_address_verification_from_defendant }
+      - "receipt_of_address_verification_from_defendant": ${ address_verification_method == "receipt_of_address_verification_from_defendant" }
       - "defendant_address_verification_method": ${ defendant_address_verification_method }
       - "verification_date1": ${ verification_date1 }
-      - "received_certified_mail_receipt_from_defendant": ${ received_certified_mail_receipt_from_defendant }
+      - "received_certified_mail_receipt_from_defendant": ${ address_verification_method == "received_certified_mail_receipt_from_defendant" }
       - "verification_date2": ${ verification_date2 }
-      - "letter_sent_not_returned_and_address_on_database": ${ letter_sent_not_returned_and_address_on_database }
+      - "letter_sent_not_returned_and_address_on_database": ${ address_verification_method == "letter_sent_not_returned_and_address_on_database" }
       - "municipal_record_used": ${ municipal_record_used }
       - "municipal_record_name": ${ municipal_record_name }
       - "state_motor_vehicle_registry_record_used": ${ state_motor_vehicle_registry_record_used }
