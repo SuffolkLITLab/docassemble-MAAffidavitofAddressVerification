@@ -280,7 +280,7 @@ subquestion: |
 fields:
   - "Please insert your name, job position and employer information.": plaintiff_name_position_and_employer
     maxlength: 94
-    required: False
+    required: True
 ---
 id: preview affidavit_of_address_verification
 question: |
