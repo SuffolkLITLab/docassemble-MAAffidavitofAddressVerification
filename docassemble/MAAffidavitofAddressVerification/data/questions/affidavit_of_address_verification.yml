@@ -7,11 +7,11 @@ metadata:
   title: >-
     Affidavit of address verification
   short title: >-
-    Affidavit of address veri
+    Affidavit of address verification
   description: |-
-    This interview helps someone in Massachusetts file an affidavit of address verification.
+    This interview helps someone in Massachusetts complete an affidavit of address verification.
   can_I_use_this_form: |
-    If you are a plaintiff, or represent a plaintiff, in a case filed to collect money from borrowers who have not made credit card, loan, or certain other types of payments, you can    use this interview to fill out an affidavit of address verification.
+    If you are a plaintiff, or represent a plaintiff, in a case filed to collect money from borrowers who have not made credit card, loan, or certain other types of payments, you can    use this interview to complete an affidavit of address verification.
   before_you_start: |
     This interview will help you file an affidavit of address verification.
     
@@ -70,7 +70,7 @@ code: |
   github_repo_name =  'docassemble-AffidavitOfAddressVerification'
 ---
 code: |
-  interview_short_title = "File an affidavit of address verification"
+  interview_short_title = "Complete an affidavit of address verification"
 ---
 code: |
   al_form_type = "existing_case" 
@@ -106,10 +106,10 @@ code: |
     verification_date2
   if address_verification_method == "letter_sent_not_returned_and_address_on_database":
     record_type_used
-  if record_type_used == "municipal_record_used":
-    municipal_record_name
-  if record_type_used == "state_motor_vehicle_registry_record_used":
-    state_motor_vehicle_registry_record_name
+    if record_type_used == "municipal_record_used":
+      municipal_record_name
+    if record_type_used == "state_motor_vehicle_registry_record_used":
+      state_motor_vehicle_registry_record_name
   if address_verification_method == "letter_sent_not_returned_and_address_on_database":
     defendant_address_selection_basis_for_service
   set_progress(40)
@@ -157,15 +157,13 @@ subquestion: |
   1. Print this form. 
   1. File this form in the proper court.
 
-  If you are a plaintiff, or represent a plaintiff, in a case filed to collect money from borrowers who have not made credit card, loan, or certain other types of payments, you can    use this interview to fill out an affidavit of address verification.
-
   Most people take about 10 minutes to complete this interview.
 ---
 id: Should I be filing this form
 question: |
   Should I be filing this form?
 subquestion: |
-  A plaintiff is required to file this form with their complaint for claims to collect consumer debt, primarily credit card collection cases. If you are not a plaintiff in this type of case or do not represent a plaintiff pursuing this type of claim, do not continue with this interview.
+  A plaintiff must file this form with their complaint for claims to collect consumer debt, primarily in credit card collection cases. If you are not a plaintiff in this type of case or do not represent a plaintiff pursuing this type of claim, do not continue with this interview.
 continue button field: should_I_be_filing_this_form
 ---
 id: user's name
@@ -182,18 +180,18 @@ id: How did you verify the defendant s address
 question: |
   How did you verify the defendant's address?
 subquestion: |
-  By filling out this form, you, as the plaintiff or in representing the plaintiff, are stating that the defendant's residential address was verified within three months prior to the commencement of this action by at least one of the following three methods. 
+  By completing this form, you, as the plaintiff or by representing the plaintiff, are stating that the defendant's residential address was confirmed within three months prior to the start of this action by at least one of the following three methods. 
 fields:
   - Please select one verification method: address_verification_method
     datatype: radio
     choices:
-      - "Received correspondence from the defendant with their return address or received     correspondence from the defendant within the past three months.": receipt_of_address_verification_from_defendant
+      - "Received correspondence from the defendant with their return address or received     other address verification from the defendant within the past three months.": receipt_of_address_verification_from_defendant
       - "Received a certified mail receipt signed by the defendant with their address within the past three months.": received_certified_mail_receipt_from_defendant
       - "Sent a letter by first-class mail to this address for the defendant that has not been returned, and you verified this address using a paid subscriber-based commercial database.": letter_sent_not_returned_and_address_on_database
 --- 
 id: Option 1
 question: |
-  Received correspondence from the defendant with their return address or received correspondence from the defendant within the past three months.
+  Received correspondence from the defendant with their return address or received other address verification from the defendant within the past three months.
 fields: 
   - "Please insert other verification method from the defendant, if applicable.": defendant_address_verification_method
     maxlength: 84
@@ -276,9 +274,9 @@ id: Employment Information
 question: |
   Employment Information
 subquestion: |
-  As a final step before signature, please insert the following requested information regarding your, or your client's, employment status.
+  Insert your, or your client's, employment status.
 fields:
-  - "Please insert your name, job position and employer information.": plaintiff_name_position_and_employer
+  - "Insert your name, job position and employer information.": plaintiff_name_position_and_employer
     maxlength: 94
     required: True
 ---
@@ -443,7 +441,7 @@ event: affidavit_of_address_verification_download
 question: |
   All done
 subquestion: |
-  Thank you ${users}. Your form is ready to download and deliver.
+  Thank you ${users} your form is ready to download and deliver.
   
   View, download and send your form below. Click the "Edit answers" button to fix any mistakes.
 
@@ -460,12 +458,12 @@ progress: 100
 # ALDocument objects specify the metadata for each template
 objects:
   - affidavit_of_address_verification_Post_interview_instructions: ALDocument.using(title="Instructions", filename="affidavit_of_address_verification_next_steps.docx", enabled=True, has_addendum=False)
-  - affidavit_of_address_verification_attachment: ALDocument.using(title="Affidavit of address verification", filename="affidavit_of_address_verification", enabled=True, has_addendum=False, )
+  - affidavit_of_address_verification_attachment: ALDocument.using(title="Affidavit of address verification", filename="affidavit_address_verification3", enabled=True, has_addendum=False, )
 ---
 # Bundles group the ALDocuments into separate downloads, such as for court and for the user
 objects:
-  - al_user_bundle: ALDocumentBundle.using(elements=[affidavit_of_address_verification_Post_interview_instructions, affidavit_of_address_verification_attachment], filename="affidavit_of_address_verification", title="All forms to download for your records", enabled=True)
-  - al_court_bundle: ALDocumentBundle.using(elements=[affidavit_of_address_verification_attachment],  filename="affidavit_of_address_verification", title="All forms to deliver to court", enabled=True)
+  - al_user_bundle: ALDocumentBundle.using(elements=[affidavit_of_address_verification_Post_interview_instructions, affidavit_of_address_verification_attachment], filename="affidavit_address_verification5", title="All forms to download for your records", enabled=True)
+  - al_court_bundle: ALDocumentBundle.using(elements=[affidavit_of_address_verification_attachment],  filename="affidavit_address_verification5", title="All forms to deliver to court", enabled=True)
 ---
 # Each attachment defines a key in an ALDocument. We use `i` as the placeholder here so the same template is 
 # used for "preview" and "final" keys, and logic in the template checks the value of 
@@ -480,10 +478,10 @@ attachment:
 ---
 attachment:
   name: affidavit of address verification
-  filename: affidavit_of_address_verification
+  filename: affidavit_address_verification5
   variable name: affidavit_of_address_verification_attachment[i]
   skip undefined: True
-  pdf template file: affidavit_of_address_verification.pdf
+  pdf template file: affidavit_address_verification5.pdf
   fields:
       - "docket_number": ${ docket_number }
       - "defendant_name": ${ defendants[0] }
@@ -505,6 +503,3 @@ attachment:
       - "plaintiff_signature": ${ plaintiffs[0].signature_if_final(i) }
       - "signature_date": ${ signature_date }
       - "plaintiff_name_position_and_employer": ${ plaintiff_name_position_and_employer }
-
-
-
