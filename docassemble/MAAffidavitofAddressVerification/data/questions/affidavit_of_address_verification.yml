@@ -18,14 +18,14 @@ metadata:
     Before you get started, please gather:
     
     1. Your case docket number. 
-    2. Any correspondence sent to or received from the defendant, if applicable. 
-    3. Any documentation used to verify the defendant's address. 
+    2. Any mail sent to or received from the defendant, if applicable. 
+    3. Any documents used to verify the defendant's address. 
     4. Your employment information.
     
     When you are finished, you will need to:
     
     1. Print this form. 
-    1. File this form in the proper court.
+    1. File this form in the proper court with your complaint.
   maturity: production
   estimated_completion_minutes: 10
   estimated_completion_delta: 5
@@ -114,7 +114,7 @@ code: |
     defendant_address_selection_basis_for_service
   set_progress(40)
   plaintiff_name_position_and_employer
-  plaintiffs[0].signature
+  users[0].signature
   signature_date
   interview_order_affidavit_of_address_verification = True
 ---
@@ -148,14 +148,14 @@ subquestion: |
   Before you get started, please gather:
   
   1. Your case docket number. 
-  2. Any correspondence sent to or received from the defendant, if applicable. 
-  3. Any documentation used to verify the defendant's address. 
+  2. Any mail sent to or received from the defendant, if applicable. 
+  3. Any documents used to verify the defendant's address. 
   4. Your employment information.
   
   When you are finished, you will need to:
   
   1. Print this form. 
-  1. File this form in the proper court.
+  1. File this form in the proper court with your complaint.
 
   Most people take about 10 minutes to complete this interview.
 ---
@@ -179,21 +179,19 @@ fields:
 id: How did you verify the defendant s address
 question: |
   How did you verify the defendant's address?
-subquestion: |
-  By completing this form, you, as the plaintiff or by representing the plaintiff, are stating that the defendant's residential address was confirmed within three months prior to the start of this action by at least one of the following three methods. 
 fields:
-  - Please select one verification method: address_verification_method
+  - I verfied the defendant's address when: address_verification_method
     datatype: radio
     choices:
-      - "Received correspondence from the defendant with their return address or received     other address verification from the defendant within the past three months.": receipt_of_address_verification_from_defendant
-      - "Received a certified mail receipt signed by the defendant with their address within the past three months.": received_certified_mail_receipt_from_defendant
-      - "Sent a letter by first-class mail to this address for the defendant that has not been returned, and you verified this address using a paid subscriber-based commercial database.": letter_sent_not_returned_and_address_on_database
+      - "I got mail from the defendant with their return address or I got other address verification from the defendant within the past three months.": receipt_of_address_verification_from_defendant
+      - "I got a certified mail receipt signed by the defendant with their address within the past three months.": received_certified_mail_receipt_from_defendant
+      - "I sent a letter by first-class mail to the defendant within the past three months that has not been returned, and I confirmed this address using a paid subscriber-based commercial database.": letter_sent_not_returned_and_address_on_database
 --- 
 id: Option 1
 question: |
-  Received correspondence from the defendant with their return address or received other address verification from the defendant within the past three months.
+  I got mail from the defendant with their return address or I got other address verification from the defendant within the past three months.
 fields: 
-  - "Please insert other verification method from the defendant, if applicable.": defendant_address_verification_method
+  - "Describe how you got the other address verification from the defendant, if applicable.": defendant_address_verification_method
     maxlength: 84
     required: False
   - "Verification date.": verification_date1
@@ -205,7 +203,7 @@ show if:
 ---
 id: Option 2
 question: | 
-  Received a certified mail receipt signed by the defendant with their address within the past three months.
+  I got a certified mail receipt signed by the defendant with their address within the past three months.
 fields: 
   - "Verification date.": verification_date2
     maxlength: 22
@@ -216,25 +214,25 @@ show if:
 ---
 id: Option 3
 question: |
-  Sent a letter by first-class mail to this address for the defendant that has not been returned, and you verified this address using a paid subscriber-based commercial database.
+  I sent a letter by first-class mail to the defendant within the past three months that has not been returned, and I confirmed this address using a paid subscriber-based commercial database.
 subquestion: |
-  In addition to sending first-class mail and verifying the address through a paid subscriber-based commercial database, you, or your client, must have used a municipal record or state motor vehicle registry record to confirm the address if available. Please select one of the following. 
+  You must also have used a municipal record or state motor vehicle registry record to confirm the address, if available.
 fields:
-  - Please select one verification method: record_type_used
+  - When confirming the defendant's address: record_type_used
     datatype: radio
     choices:
-      - "Used a municipal record to further verify the defendant's address. For example, a street list or tax record.": municipal_record_used
-      - "Used a state motor vehicle registry record to further verify the defendant's address.": state_motor_vehicle_registry_record_used
-      - "Neither record type was available.": neither_record_type_available
+      - "I used a municipal record. For example, a street list or tax record.": municipal_record_used
+      - "I used a state motor vehicle registry record.": state_motor_vehicle_registry_record_used
+      - "Neither record type was available to me.": neither_record_type_available
 show if: 
   variable: letter_sent_not_returned_and_address_on_database
   is: True
 ---
 id: Option 3a
 question: |
-  Used a municipal record to further verify the defendant's address.
+  I used a municipal record to further verify the defendant's address.
 fields:
-  - Please insert the name of the municipal record used: municipal_record_name
+  - Insert the name of the municipal record.: municipal_record_name
     maxlength: 80
     required: True
   - "Verification date.": verification_date3
@@ -246,9 +244,9 @@ show if:
 ---
 id: Option 3b
 question: |
-  Used a state motor vehicle registry record to further verify the defendant's address.
+  I used a state motor vehicle registry record to further verify the defendant's address.
 fields:
-  - Please insert the name of the state motor vehicle registry record used: state_motor_vehicle_registry_record_name
+  - Insert the name of the state motor vehicle registry record.: state_motor_vehicle_registry_record_name
     maxlength: 80
     required: True
   - "Verification date.": verification_date3
@@ -260,9 +258,9 @@ show if:
 ---
 id: Option 3 cont.
 question: |
-  Sent a letter by first-class mail to the defendant. 
+  If any database, municipal record, or state motor vehicle registry record showed more than one address for the defendant during the last 12 months, why did you choose the address you did?
 fields:
-  - "If any database, municipal record, or state record used showed more than one address for the defendant during the last 12 months, please describe the basis for selecting the address used for service.": defendant_address_selection_basis_for_service
+  - "Reason for address choice.": defendant_address_selection_basis_for_service
     datatype: area
     maxlength: 83
     required: False
@@ -270,13 +268,11 @@ show if:
   variable: letter_sent_not_returned_and_address_on_database
   is: True
 ---
-id: Employment Information
+id: Employment information
 question: |
-  Employment Information
-subquestion: |
-  Insert your, or your client's, employment status.
+  Employment information
 fields:
-  - "Insert your name, job position and employer information.": plaintiff_name_position_and_employer
+  - "Insert your name, job position, and employer name.": plaintiff_name_position_and_employer
     maxlength: 94
     required: True
 ---
@@ -297,7 +293,7 @@ subquestion: |
 continue button field: affidavit_of_address_verification_preview_question    
 ---
 code: |
-  signature_fields = ['plaintiffs[0].signature']
+  signature_fields = ['users[0].signature']
 ---
 code: |
   # This is a placeholder for the addresses that will be searched
@@ -458,12 +454,12 @@ progress: 100
 # ALDocument objects specify the metadata for each template
 objects:
   - affidavit_of_address_verification_Post_interview_instructions: ALDocument.using(title="Instructions", filename="affidavit_of_address_verification_next_steps.docx", enabled=True, has_addendum=False)
-  - affidavit_of_address_verification_attachment: ALDocument.using(title="Affidavit of address verification", filename="affidavit_address_verification3", enabled=True, has_addendum=False, )
+  - affidavit_of_address_verification_attachment: ALDocument.using(title="Affidavit of address verification", filename="affidavit_address_verification11", enabled=True, has_addendum=False, )
 ---
 # Bundles group the ALDocuments into separate downloads, such as for court and for the user
 objects:
-  - al_user_bundle: ALDocumentBundle.using(elements=[affidavit_of_address_verification_Post_interview_instructions, affidavit_of_address_verification_attachment], filename="affidavit_address_verification5", title="All forms to download for your records", enabled=True)
-  - al_court_bundle: ALDocumentBundle.using(elements=[affidavit_of_address_verification_attachment],  filename="affidavit_address_verification5", title="All forms to deliver to court", enabled=True)
+  - al_user_bundle: ALDocumentBundle.using(elements=[affidavit_of_address_verification_Post_interview_instructions, affidavit_of_address_verification_attachment], filename="affidavit_address_verification11", title="All forms to download for your records", enabled=True)
+  - al_court_bundle: ALDocumentBundle.using(elements=[affidavit_of_address_verification_attachment],  filename="affidavit_address_verification11", title="All forms to deliver to court", enabled=True)
 ---
 # Each attachment defines a key in an ALDocument. We use `i` as the placeholder here so the same template is 
 # used for "preview" and "final" keys, and logic in the template checks the value of 
@@ -478,10 +474,10 @@ attachment:
 ---
 attachment:
   name: affidavit of address verification
-  filename: affidavit_address_verification5
+  filename: affidavit_address_verification11
   variable name: affidavit_of_address_verification_attachment[i]
   skip undefined: True
-  pdf template file: affidavit_address_verification5.pdf
+  pdf template file: affidavit_address_verification11.pdf
   fields:
       - "docket_number": ${ docket_number }
       - "defendant_name": ${ defendants[0] }
@@ -500,6 +496,6 @@ attachment:
       - "neither_record_type_available": ${ neither_record_type_available }
       - "defendant_address_selection_basis_for_service": ${ defendant_address_selection_basis_for_service }
       - "verification_date3": ${ verification_date3 }
-      - "plaintiff_signature": ${ plaintiffs[0].signature_if_final(i) }
+      - "users[0]_signature": ${ users[0].signature }
       - "signature_date": ${ signature_date }
       - "plaintiff_name_position_and_employer": ${ plaintiff_name_position_and_employer }
