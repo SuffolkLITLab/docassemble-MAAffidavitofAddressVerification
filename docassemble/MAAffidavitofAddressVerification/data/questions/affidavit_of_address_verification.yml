@@ -82,6 +82,12 @@ objects:
   - municipal_record: ALPeopleList
 ---
 sections:
+  - introduction: Getting started
+  - user_info: Your information
+  - defendant_info: Defendant information
+  - court_info: Court information
+  - address_verification: Address verification method
+  - final_steps: Final steps
   - review_affidavit_of_address_verification: Review your answers
 ---
 #################### Interview order #####################
@@ -91,15 +97,23 @@ id: interview_order_affidavit_of_address_verification
 code: |
   # Set the allowed courts for this interview
   allowed_courts = ['Boston Municipal Court', 'District Court', 'Superior Court']
-  nav.set_section("review_affidavit_of_address_verification")
+  nav.set_section("introduction")
+  should_I_be_filing_this_form
+
+  nav.set_section("user_info")
   user_role = "plaintiff"
   user_ask_role = "plaintiff"
-  should_I_be_filing_this_form
-  docket_number
   plaintiffs.gather()
-  set_progress(20)
+
+  nav.set_section("defendant_info")
   defendants.gather()
+
+  nav.set_section("court_info")
+  docket_number
   trial_court.address.address
+  set_progress(20)
+
+  nav.set_section("address_verification")
   address_verification_method
   if address_verification_method == "receipt_of_address_verification_from_defendant": 
     defendant_address_verification_method
@@ -111,12 +125,18 @@ code: |
       municipal_record_name
     if record_type_used == "state_motor_vehicle_registry_record_used":
       state_motor_vehicle_registry_record_name
+    if record_type_used == "neither_record_type_available":
+      verification_date3
   if address_verification_method == "letter_sent_not_returned_and_address_on_database":
     defendant_address_selection_basis_for_service
   set_progress(40)
+  
+  nav.set_section("final_steps")
   plaintiff_name_position_and_employer
   users[0].signature
   signature_date
+
+  nav.set_section("review_affidavit_of_address_verification")
   interview_order_affidavit_of_address_verification = True
 ---
 ###################### Main order ######################
@@ -146,11 +166,11 @@ question: |
 subquestion: |
   This interview will help you file an affidavit of address verification.
   
-  Before you get started, please gather:
+  Before you get started, gather the following:
   
   1. Your case docket number. 
   2. Any mail sent to or received from the defendant, if applicable. 
-  3. Any documents used to verify the defendant's address. 
+  3. Any documents used to confirm the defendant's address. 
   4. Your employment information.
   
   When you are finished, you will need to:
@@ -198,6 +218,7 @@ fields:
   - "Verification date.": verification_date1
     maxlength: 23
     required: True
+    datatype: date
 show if: 
   variable: receipt_of_address_verification_from_defendant
   is: True
@@ -209,6 +230,7 @@ fields:
   - "Verification date.": verification_date2
     maxlength: 22
     required: True
+    datatype: date
 show if: 
   variable: received_certified_mail_receipt_from_defendant
   is: True
@@ -239,6 +261,7 @@ fields:
   - "Verification date.": verification_date3
     maxlength: 23
     required: True
+    datatype: date
 show if: 
   variable: municipal_record_used
   is: True
@@ -253,8 +276,21 @@ fields:
   - "Verification date.": verification_date3
     maxlength: 23
     required: True
+    datatype: date
 show if: 
   variable: state_motor_vehicle_registry_record_used
+  is: True
+---
+id: Option 3c
+question: |
+  Neither record type was available to me.
+fields:
+  - "Verification date.": verification_date3
+    maxlength: 23
+    required: True
+    datatype: date
+show if: 
+  variable: neither_record_type_available
   is: True
 ---
 id: Option 3 cont.
