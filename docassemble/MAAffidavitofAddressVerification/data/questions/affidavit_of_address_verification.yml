@@ -2,7 +2,7 @@
 include:
   - docassemble.AssemblyLine:assembly_line.yml
   - docassemble.MassAccess:massaccess.yml
-  - docassemble.MATCTheme:matc_theme.yml
+  #- docassemble.MATCTheme:matc_theme.yml # This form has not been approved by the MATC yet
 ---
 metadata:
   title: >-
@@ -11,8 +11,11 @@ metadata:
     Affidavit of address verification
   description: |-
     This interview helps someone in Massachusetts complete an affidavit of address verification.
+
+    If you are suing someone to collect money, you need to file an affidavit of address verification
+    to make sure you gave the defendant the right notice of the lawsuit.
   can_I_use_this_form: |
-    If you are a plaintiff, or represent a plaintiff, in a case filed to collect money from borrowers who have not made credit card, loan, or certain other types of payments, you can    use this interview to complete an affidavit of address verification.
+    If you are a plaintiff, or represent a plaintiff, in a case filed to collect money from borrowers who have not made credit card, loan, or certain other types of payments, you can use this interview to complete an affidavit of address verification.
   before_you_start: |
     This interview will help you file an affidavit of address verification.
     
@@ -32,13 +35,15 @@ metadata:
   estimated_completion_delta: 5
   LIST_topics: 
     - "MO-00-00-00-00"
+    - CO-00-00-00-00
   tags:
     - "MO-00-00-00-00"
+    - CO-00-00-00-00
   authors:
     - Erin Gray
   original_form:
     - https://www.mass.gov/doc/affidavit-of-address-verification-mass-r-civ-p-81e/download
-  original_form_published_on: ""
+  original_form_published_on: "2018"
   help_page_url: >-
     https://www.mass.gov/rules-of-civil-procedure/civil-procedure-rule-81-special-requirements-for-certain-consumer-debts
   help_page_title: >-
@@ -184,7 +189,10 @@ id: Should I be filing this form
 question: |
   Should I be filing this form?
 subquestion: |
-  A plaintiff must file this form with their complaint for claims to collect consumer debt, primarily in credit card collection cases. If you are not a plaintiff in this type of case or do not represent a plaintiff pursuing this type of claim, do not continue with this interview.
+  A plaintiff must file this form with their complaint for claims to 
+  collect consumer debt, primarily in credit card collection cases. If you 
+  are not a plaintiff in this type of case or do not represent a plaintiff 
+  pursuing this type of claim, do not continue with this interview.
 continue button field: should_I_be_filing_this_form
 ---
 id: user's name
@@ -533,6 +541,6 @@ attachment:
       - "neither_record_type_available": ${ neither_record_type_available }
       - "defendant_address_selection_basis_for_service": ${ defendant_address_selection_basis_for_service }
       - "verification_date3": ${ verification_date3 }
-      - "users[0]_signature": ${ users[0].signature }
+      - "users[0]_signature": ${ users[0].signature_if_final(i) }
       - "signature_date": ${ signature_date }
       - "plaintiff_name_position_and_employer": ${ plaintiff_name_position_and_employer }
