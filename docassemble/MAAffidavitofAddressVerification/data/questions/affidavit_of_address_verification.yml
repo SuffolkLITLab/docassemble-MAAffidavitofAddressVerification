@@ -499,12 +499,12 @@ progress: 100
 # ALDocument objects specify the metadata for each template
 objects:
   - affidavit_of_address_verification_Post_interview_instructions: ALDocument.using(title="Instructions", filename="affidavit_of_address_verification_next_steps.docx", enabled=True, has_addendum=False)
-  - affidavit_of_address_verification_attachment: ALDocument.using(title="Affidavit of address verification", filename="affidavit_address_verification11", enabled=True, has_addendum=False, )
+  - affidavit_of_address_verification_attachment: ALDocument.using(title="Affidavit of address verification", filename="affidavit_address_verification", enabled=True, has_addendum=False, )
 ---
 # Bundles group the ALDocuments into separate downloads, such as for court and for the user
 objects:
-  - al_user_bundle: ALDocumentBundle.using(elements=[affidavit_of_address_verification_Post_interview_instructions, affidavit_of_address_verification_attachment], filename="affidavit_address_verification11", title="All forms to download for your records", enabled=True)
-  - al_court_bundle: ALDocumentBundle.using(elements=[affidavit_of_address_verification_attachment],  filename="affidavit_address_verification11", title="All forms to deliver to court", enabled=True)
+  - al_user_bundle: ALDocumentBundle.using(elements=[affidavit_of_address_verification_Post_interview_instructions, affidavit_of_address_verification_attachment], filename="affidavit_address_verification", title="All forms to download for your records", enabled=True)
+  - al_court_bundle: ALDocumentBundle.using(elements=[affidavit_of_address_verification_attachment],  filename="affidavit_address_verification", title="All forms to deliver to court", enabled=True)
 ---
 # Each attachment defines a key in an ALDocument. We use `i` as the placeholder here so the same template is 
 # used for "preview" and "final" keys, and logic in the template checks the value of 
@@ -519,10 +519,10 @@ attachment:
 ---
 attachment:
   name: affidavit of address verification
-  filename: affidavit_address_verification11
+  filename: affidavit_address_verification
   variable name: affidavit_of_address_verification_attachment[i]
   skip undefined: True
-  pdf template file: affidavit_address_verification11.pdf
+  pdf template file: affidavit_address_verification.pdf
   fields:
       - "docket_number": ${ docket_number }
       - "defendant_name": ${ defendants[0] }
