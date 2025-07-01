@@ -53,7 +53,7 @@ setup(name='docassemble.MAAffidavitofAddressVerification',
       license='The MIT License',
       url='https://courtformsonline.org',
       packages=find_namespace_packages(),
-      install_requires=['docassemble.AssemblyLine>=3.2.0'],
+      install_requires=['docassemble.AssemblyLine>=3.2.0', 'docassemble.MassAccess'],
       zip_safe=False,
       package_data=find_package_data(where='docassemble/MAAffidavitofAddressVerification/', package='docassemble.MAAffidavitofAddressVerification'),
      )
